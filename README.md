@@ -46,7 +46,7 @@ hermes plugins install jasper-zsh/hermes-prompt-models --enable
 
 ## Architecture
 
-Version **0.1.0**, verified against Hermes source commit `bf0203a794a07aac3ff764972ab9087baa4e4f4e` (v0.22.5). The implementation uses host internals and should be retested after Hermes upgrades. The backend uses POSIX `fcntl` locking; native Windows backend compatibility is not claimed.
+Version **0.1.1**, verified against Hermes source commit `bf0203a794a07aac3ff764972ab9087baa4e4f4e` (v0.22.5). The implementation uses host internals and should be retested after Hermes upgrades. The backend uses POSIX `fcntl` locking; native Windows backend compatibility is not claimed.
 
 The package contains:
 
@@ -75,9 +75,11 @@ python run_ui_tests.py
 
 Recorded verification:
 
-- **12 Python tests passed**: real host discovery/client/request construction, fixed-route terminal failure, deep-copy preservation, atomic storage and REST CRUD, OpenAI SDK MockTransport wire tests, Codex tool/reasoning conversion, completed-response and SSE two-turn replay.
+- **14 Python tests passed**: real host discovery/client/request construction, fixed-route terminal failure, deep-copy preservation, atomic storage and REST CRUD, OpenAI SDK MockTransport wire tests, Codex tool/reasoning conversion, completed-response and SSE two-turn replay.
 - **2 React DOM tests passed** using actual host UI controls, with host state and REST mocked: settings registration, CRUD/model selection/readback and backend errors.
 - **Plugin Doctor passed**, plus independent source review of the production implementation and replay fix.
+- **Installer scan passed** using the host's actual `tools.plugin_guard.scan_plugin()` and `should_allow_plugin_install(..., force=False)` (`plugin-guard-v11`): `safe`, allowed without force, no critical/high findings. The two root-level test runners retain visible medium execution findings because they launch isolated Python tests/Doctor and Vitest; these do not block installation. No scanner exclusions or severity overrides are added.
+- Installer regression coverage asserts that the real host gate permits the package. A separate compatibility test exercises the host routed-client helper: the facade retains `api_key = None` because host helpers access that attribute, but carries no dummy credential. Upstream authentication remains host-managed.
 
 The Python runner uses a disposable profile, removes inherited authentication environment, and disables lazy installs. UI tests temporarily link the host's Node dependencies and remove the link afterward.
 

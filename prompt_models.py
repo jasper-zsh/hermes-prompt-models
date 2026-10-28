@@ -97,7 +97,9 @@ class Client:
         self.builder = builder
         self.snapshots = {}
         self.base_url = 'https://prompt-models.invalid/v1'
-        self.api_key = 'prompt-models-local-facade'
+        # Host routed-client helpers read this attribute; the facade has no credential.
+        # Authentication belongs exclusively to the resolved upstream client.
+        self.api_key = None
         self.chat = SimpleNamespace(completions=SimpleNamespace(create=self.create))
 
     def close(self):

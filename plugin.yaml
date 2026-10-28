@@ -1,6 +1,6 @@
 name: prompt-models
 kind: model-provider
-version: 0.1.0
+version: 0.1.1
 description: Profile-local prompt presets pinned to existing model routes, with Desktop settings.
 author: jasper-zsh
 license: MIT
